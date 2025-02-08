@@ -20,6 +20,7 @@ func Initialize() *chi.Mux {
 	})
 
 	r.Mount("/category", categoryRouter())
+	r.Mount("/admin", adminRouter())
 
 	return r
 }
