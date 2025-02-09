@@ -1,4 +1,4 @@
-package category_service
+package category_group_service
 
 import (
 	"database/sql"
