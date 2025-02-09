@@ -75,6 +75,24 @@ func (s *SQLiteUserService) GetUser(id int64) (models.User, error) {
 	return user, nil
 }
 
+func (s *SQLiteUserService) GetUserByUsername(username string) (models.User, error) {
+	row := s.db.QueryRow(`
+		SELECT
+			id, username, hashed_password, currency,
+			created_at, updated_at, deleted_at
+		FROM user
+		WHERE username = ? AND deleted_at IS NULL
+	`, username)
+	user, err := scanIntoStruct(row)
+	if err != nil {
+		return models.User{}, err
+	} else if user.ID == 0 {
+		return models.User{}, fmt.Errorf("user with username %q not found", username)
+	}
+
+	return user, nil
+}
+
 func (s *SQLiteUserService) UpdateUser(user models.User) (models.User, error) {
 	// Implement the method
 	return user, nil

@@ -10,4 +10,5 @@ type UserService interface {
 	GetUser(userID int64) (models.User, error)
 	UpdateUser(user models.User) (models.User, error)
 	DeleteUser(userID int64) error
+	GetUserByUsername(username string) (models.User, error)
 }

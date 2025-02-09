@@ -19,7 +19,7 @@ func RegisterAccount(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	validation.AccountDoesNotExist(registerCreds.Username)
+	validation.AccountDoesNotExist(w, registerCreds.Username)
 
 	hashedPassword := utils.HashPassword(registerCreds.Password)
 	_, err := provider.Provider.UserService.CreateUser(models.UserFields{
