@@ -30,8 +30,7 @@ func (s *SQLiteCategoryService) CreateCategory(category models.CategoryFields) (
 		RETURNING id, name, category_group_id, created_at, updated_at, deleted_at
 	`, category.Name, category.CategoryGroupID)
 
-	var newCategory models.Category
-	err := row.Scan(&newCategory)
+	newCategory, err := scanIntoStruct(row)
 	if err != nil {
 		return models.Category{}, err
 	}

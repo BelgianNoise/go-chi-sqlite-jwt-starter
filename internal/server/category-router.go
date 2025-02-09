@@ -9,6 +9,7 @@ import (
 	models "gofinn/internal/models"
 	provider "gofinn/internal/provider"
 	"gofinn/internal/utils"
+	"gofinn/internal/validation"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -38,11 +39,15 @@ func CategoryCtx(next http.Handler) http.Handler {
 			http.Error(w, "Invalid category ID", http.StatusBadRequest)
 			return
 		}
+
 		catgory, err := provider.Provider.CategoryService.GetCategory(id)
 		if err != nil {
 			http.Error(w, http.StatusText(404), http.StatusNotFound)
 			return
 		}
+
+		validation.HasAccessToCategoryGroup(catgory.CategoryGroupID)
+
 		ctx := context.WithValue(r.Context(), models.ContextKeys.Category, catgory)
 		ctx = context.WithValue(ctx, models.ContextKeys.CategoryID, categoryID)
 		next.ServeHTTP(w, r.WithContext(ctx))

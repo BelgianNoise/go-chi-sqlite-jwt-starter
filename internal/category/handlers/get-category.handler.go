@@ -6,7 +6,10 @@ import (
 )
 
 func GetCategory(w http.ResponseWriter, r *http.Request) {
-	category := getCategoryFromContext(w, r)
+	category, ok := getCategoryFromContext(w, r)
+	if !ok {
+		return
+	}
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(category)
