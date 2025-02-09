@@ -6,6 +6,7 @@ import (
 	"gofinn/internal/models"
 	"gofinn/internal/provider"
 	"net/http"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/jwtauth/v5"
@@ -49,10 +50,12 @@ func myAuthMiddleware(next http.Handler) http.Handler {
 }
 
 func GenerateJWT(user models.User) (string, error) {
+	ttl := 7 * 24 * time.Hour // 1 week
 	_, tokenString, err := tokenAuth.Encode(map[string]interface{}{
 		"user_id": user.ID,
 		"role":    user.Role,
 		"sub":     user.Username,
+		"exp":     time.Now().UTC().Add(ttl).Unix(),
 	})
 	return tokenString, err
 }
