@@ -10,10 +10,7 @@ import (
 )
 
 func RegisterAccount(w http.ResponseWriter, r *http.Request) {
-	var registerCreds struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
-	}
+	var registerCreds models.AuthParams
 	if err := json.NewDecoder(r.Body).Decode(&registerCreds); err != nil {
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
 		return
