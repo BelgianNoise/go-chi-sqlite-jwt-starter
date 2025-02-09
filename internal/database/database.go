@@ -24,7 +24,14 @@ func Initialize() {
 	dbFolder := config.Variables.DB_FOLDER
 	os.MkdirAll(dbFolder, 0755)
 	dbFileLocation := dbFolder + "/data.db"
-	os.Create(dbFileLocation)
+
+	if _, err := os.Stat(dbFileLocation); os.IsNotExist(err) {
+		file, err := os.Create(dbFileLocation)
+		if err != nil {
+			panic("Failed to create database file: " + err.Error())
+		}
+		file.Close()
+	}
 
 	db, err := sql.Open("sqlite3", "file:"+dbFileLocation+"?cache=shared&mode=rwc&_fk=1")
 	if err != nil {

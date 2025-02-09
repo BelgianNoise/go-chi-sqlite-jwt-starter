@@ -2,7 +2,7 @@ package database
 
 var Triggers = []string{
 	`
-		CREATE TRIGGER update_user_timestamp
+		CREATE TRIGGER IF NOT EXISTS update_user_timestamp
 		AFTER UPDATE ON user
 		FOR EACH ROW
 		BEGIN
@@ -10,7 +10,7 @@ var Triggers = []string{
 		END;
 	`,
 	`
-		CREATE TRIGGER update_category_group_timestamp
+		CREATE TRIGGER IF NOT EXISTS update_category_group_timestamp
 		AFTER UPDATE ON category_group
 		FOR EACH ROW
 		BEGIN
@@ -18,7 +18,7 @@ var Triggers = []string{
 		END;
 	`,
 	`
-		CREATE TRIGGER update_category_timestamp
+		CREATE TRIGGER IF NOT EXISTS update_category_timestamp
 		AFTER UPDATE ON category
 		FOR EACH ROW
 		BEGIN
