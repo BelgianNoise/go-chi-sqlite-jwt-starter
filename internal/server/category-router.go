@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"gofinn/internal/auth"
 	category_handlers "gofinn/internal/category/handlers"
 	models "gofinn/internal/models"
 	provider "gofinn/internal/provider"
@@ -14,6 +15,7 @@ import (
 
 func categoryRouter() http.Handler {
 	r := chi.NewRouter()
+	auth.UseAuthMiddleware(r)
 
 	r.Get("/list", category_handlers.ListCategories)
 	r.Post("/create", category_handlers.CreateCategory)

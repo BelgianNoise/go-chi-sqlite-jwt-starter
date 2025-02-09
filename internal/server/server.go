@@ -1,6 +1,7 @@
 package server
 
 import (
+	"gofinn/internal/auth"
 	"log"
 	"net/http"
 
@@ -14,6 +15,7 @@ func Initialize() *chi.Mux {
 
 	r := chi.NewRouter()
 	useGlobalMiddleware(r)
+	auth.InitializeTokenVerifier()
 
 	r.Get("/me", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("me me me me me me"))
