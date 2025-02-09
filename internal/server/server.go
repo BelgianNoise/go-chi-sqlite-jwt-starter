@@ -21,6 +21,7 @@ func Initialize() *chi.Mux {
 
 	r.Mount("/category", categoryRouter())
 	r.Mount("/admin", adminRouter())
+	r.Mount("/auth", authRouter())
 
 	return r
 }
