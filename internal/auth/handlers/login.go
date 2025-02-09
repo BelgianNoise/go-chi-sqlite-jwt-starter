@@ -22,7 +22,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !utils.ComparePasswords(authParams.Password, user.HashedPassword) {
+	if !utils.CompareHashedToNonHashedPassword(user.HashedPassword, authParams.Password) {
 		http.Error(w, "Invalid username or password", http.StatusUnauthorized)
 		return
 	}
