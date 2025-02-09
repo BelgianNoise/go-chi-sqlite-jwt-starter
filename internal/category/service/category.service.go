@@ -5,9 +5,9 @@ import (
 )
 
 type CategoryService interface {
-	ListCategories() ([]models.Category, error)
+	ListCategoriesForUser(ownerID int64) ([]models.Category, error)
 	CreateCategory(category models.Category) (models.Category, error)
-	GetCategory(categoryID int) (models.Category, error)
+	GetCategory(categoryID int64) (models.Category, error)
 	UpdateCategory(category models.Category) (models.Category, error)
-	DeleteCategory(categoryID int) error
+	DeleteCategory(categoryID int64) error
 }

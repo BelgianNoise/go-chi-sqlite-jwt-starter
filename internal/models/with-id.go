@@ -1,9 +1,9 @@
 package models
 
 type WithID struct {
-	ID string `json:"id" db:"id"`
+	ID int64 `json:"id" db:"id"`
 }
 
 type WithOwnerID struct {
-	OwnerID string `json:"owner_id" db:"owner_id"`
+	OwnerID int64 `json:"owner_id" db:"owner_id"`
 }
