@@ -2,6 +2,7 @@ package main
 
 import (
 	"gofinn/config"
+	"gofinn/internal/database"
 	"gofinn/internal/provider"
 	"gofinn/internal/server"
 	"log"
@@ -10,6 +11,7 @@ import (
 
 func main() {
 	config.InitializeVariables()
+	database.Initialize()
 	provider.Initialize()
 	r := server.Initialize()
 
