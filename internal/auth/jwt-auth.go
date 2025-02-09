@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"gofinn/config"
 	"gofinn/internal/models"
 	"gofinn/internal/provider"
 	"net/http"
@@ -13,7 +14,8 @@ import (
 var tokenAuth *jwtauth.JWTAuth
 
 func InitializeTokenVerifier() {
-	tokenAuth = jwtauth.New("HS256", []byte("secret"), nil)
+	secret := config.Variables.AUTH_PRIVATE_KEY
+	tokenAuth = jwtauth.New("HS256", []byte(secret), nil)
 }
 
 func UseAuthMiddleware(r *chi.Mux) {

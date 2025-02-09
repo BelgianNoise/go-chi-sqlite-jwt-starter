@@ -9,8 +9,9 @@ import (
 )
 
 type ServerVariables struct {
-	Port      string `env:"PORT" env-default:"9494"`
-	DB_FOLDER string `env:"DB_FOLDER" env-default:"./data"`
+	Port             string `env:"PORT" env-default:"9494"`
+	DB_FOLDER        string `env:"DB_FOLDER" env-default:"./data"`
+	AUTH_PRIVATE_KEY string `env:"AUTH_PRIVATE_KEY" env-required:"true"`
 }
 
 var Variables ServerVariables
