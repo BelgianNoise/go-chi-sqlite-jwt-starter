@@ -12,8 +12,9 @@ type SQLiteCategoryService struct {
 }
 
 func NewSQLiteCategoryService() CategoryService {
-	db := database.GetDatabaseInstance()
-	return &SQLiteCategoryService{db: db}
+	return &SQLiteCategoryService{
+		db: database.GetDatabaseInstance(),
+	}
 }
 
 func (s *SQLiteCategoryService) ListCategoriesForUser(
@@ -22,9 +23,19 @@ func (s *SQLiteCategoryService) ListCategoriesForUser(
 	return s.getCategoriesForUser(ownerID, 100)
 }
 
-func (s *SQLiteCategoryService) CreateCategory(category models.Category) (models.Category, error) {
-	// Implement the method
-	return category, nil
+func (s *SQLiteCategoryService) CreateCategory(category models.CategoryFields) (models.Category, error) {
+	row := s.db.QueryRow(`
+		INSERT INTO category (name, category_group_id)
+		VALUES (?, ?)
+		RETURNING id, name, category_group_id, created_at, updated_at, deleted_at
+	`, category.Name, category.CategoryGroupID)
+
+	var newCategory models.Category
+	err := row.Scan(&newCategory)
+	if err != nil {
+		return models.Category{}, err
+	}
+	return newCategory, nil
 }
 
 func (s *SQLiteCategoryService) GetCategory(id int64) (models.Category, error) {
