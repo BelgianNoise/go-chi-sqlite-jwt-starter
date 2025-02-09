@@ -9,8 +9,8 @@ import (
 )
 
 func main() {
-	provider.Initialize()
 	config.InitializeVariables()
+	provider.Initialize()
 	r := server.Initialize()
 
 	port := getPort()

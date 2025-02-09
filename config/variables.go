@@ -9,7 +9,8 @@ import (
 )
 
 type ServerVariables struct {
-	Port string `env:"PORT" env-default:"9494"`
+	Port      string `env:"PORT" env-default:"9494"`
+	DB_FOLDER string `env:"DB_FOLDER" env-default:"./data"`
 }
 
 var Variables ServerVariables
@@ -24,6 +25,7 @@ func InitializeVariables() {
 		panic(errorMsg)
 	}
 	err = cleanenv.ReadEnv(&Variables)
+
 	if err != nil {
 		panic(err)
 	}
