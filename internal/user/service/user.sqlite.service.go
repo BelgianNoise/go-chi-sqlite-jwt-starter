@@ -20,7 +20,10 @@ func NewSQLiteUserService() UserService {
 func (s *SQLiteUserService) ListUsers() ([]models.User, error) {
 	var users []models.User
 	rows, err := s.db.Query(`
-		SELECT * FROM user
+		SELECT
+			id, username, hashed_password, currency,
+			created_at, updated_at, deleted_at
+		FROM user
 		WHERE deleted_at IS NULL
 	`)
 	if err != nil {
@@ -56,7 +59,10 @@ func (s *SQLiteUserService) CreateUser(user models.UserFields) (models.User, err
 
 func (s *SQLiteUserService) GetUser(id int64) (models.User, error) {
 	row := s.db.QueryRow(`
-		SELECT * FROM user
+		SELECT
+			id, username, hashed_password, currency,
+			created_at, updated_at, deleted_at
+		FROM user
 		WHERE id = ? AND deleted_at IS NULL
 	`, id)
 	user, err := scanIntoStruct(row)

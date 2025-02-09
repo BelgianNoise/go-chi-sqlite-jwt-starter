@@ -66,10 +66,10 @@ func (s *SQLiteCategoryService) getCategoriesForUser(
 	var categories []models.Category
 	rows, err := s.db.Query(`
 		SELECT
-			id, name, group_id, owner_id,
-			created_at, updated_at, deleted_at
-		FROM category
-		WHERE owner_id = ? AND deleted_at IS NULL
+			c.id, c.name, c.category_group_id,
+			c.created_at, c.updated_at, c.deleted_at
+		FROM category as c INNER JOIN category_group as cg ON c.category_group_id = cg.id
+		WHERE cg.owner_id = ? AND c.deleted_at IS NULL
 		LIMIT ?
 	`, ownerID, limit)
 	if err != nil {
@@ -77,8 +77,7 @@ func (s *SQLiteCategoryService) getCategoriesForUser(
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var category models.Category
-		err := rows.Scan(&category)
+		category, err := scanIntoStruct(rows)
 		if err == sql.ErrNoRows {
 			break
 		} else if err != nil {
@@ -89,4 +88,15 @@ func (s *SQLiteCategoryService) getCategoriesForUser(
 		}
 	}
 	return categories, nil
+}
+
+func scanIntoStruct(row interface {
+	Scan(dest ...interface{}) error
+}) (models.Category, error) {
+	var category models.Category
+	err := row.Scan(
+		&category.ID, &category.Name, &category.CategoryGroupID,
+		&category.CreatedAt, &category.UpdatedAt, &category.DeletedAt,
+	)
+	return category, err
 }
