@@ -7,6 +7,7 @@ var Tables = []string{
 			username TEXT NOT NULL,
 			hashed_password TEXT NOT NULL,
 			currency TEXT NOT NULL,
+			role TEXT NOT NULL DEFAULT 'RegularUser',
 			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 			updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 			deleted_at DATETIME

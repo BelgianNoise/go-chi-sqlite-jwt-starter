@@ -21,7 +21,7 @@ func (s *SQLiteUserService) ListUsers() ([]models.User, error) {
 	var users []models.User
 	rows, err := s.db.Query(`
 		SELECT
-			id, username, hashed_password, currency,
+			id, username, hashed_password, currency, role,
 			created_at, updated_at, deleted_at
 		FROM user
 		WHERE deleted_at IS NULL
@@ -60,7 +60,7 @@ func (s *SQLiteUserService) CreateUser(user models.UserFields) (models.User, err
 func (s *SQLiteUserService) GetUser(id int64) (models.User, error) {
 	row := s.db.QueryRow(`
 		SELECT
-			id, username, hashed_password, currency,
+			id, username, hashed_password, currency, role,
 			created_at, updated_at, deleted_at
 		FROM user
 		WHERE id = ? AND deleted_at IS NULL
@@ -78,7 +78,7 @@ func (s *SQLiteUserService) GetUser(id int64) (models.User, error) {
 func (s *SQLiteUserService) GetUserByUsername(username string) (models.User, error) {
 	row := s.db.QueryRow(`
 		SELECT
-			id, username, hashed_password, currency,
+			id, username, hashed_password, currency, role,
 			created_at, updated_at, deleted_at
 		FROM user
 		WHERE username = ? AND deleted_at IS NULL
@@ -108,7 +108,7 @@ func scanIntoStruct(row interface {
 }) (models.User, error) {
 	var user models.User
 	err := row.Scan(
-		&user.ID, &user.Username, &user.HashedPassword, &user.Currency,
+		&user.ID, &user.Username, &user.HashedPassword, &user.Currency, &user.Role,
 		&user.CreatedAt, &user.UpdatedAt, &user.DeletedAt,
 	)
 	return user, err
