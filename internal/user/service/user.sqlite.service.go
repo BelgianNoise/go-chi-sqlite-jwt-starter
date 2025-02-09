@@ -20,10 +20,7 @@ func NewSQLiteUserService() UserService {
 func (s *SQLiteUserService) ListUsers() ([]models.User, error) {
 	var users []models.User
 	rows, err := s.db.Query(`
-		SELECT
-			id, username, hashed_password, currency
-			created_at, updated_at, deleted_at
-		FROM user
+		SELECT * FROM user
 		WHERE deleted_at IS NULL
 	`)
 	if err != nil {
@@ -31,8 +28,7 @@ func (s *SQLiteUserService) ListUsers() ([]models.User, error) {
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var user models.User
-		err := rows.Scan(&user)
+		user, err := scanIntoStruct(rows)
 		if err == sql.ErrNoRows {
 			break
 		} else if err != nil {
@@ -51,9 +47,7 @@ func (s *SQLiteUserService) CreateUser(user models.UserFields) (models.User, err
 		VALUES (?, ?, ?)
 		RETURNING id, username, hashed_password, currency, created_at, updated_at, deleted_at
 	`, user.Username, user.HashedPassword, user.Currency)
-
-	var newUser models.User
-	err := row.Scan(&newUser)
+	newUser, err := scanIntoStruct(row)
 	if err != nil {
 		return models.User{}, err
 	}
@@ -61,16 +55,14 @@ func (s *SQLiteUserService) CreateUser(user models.UserFields) (models.User, err
 }
 
 func (s *SQLiteUserService) GetUser(id int64) (models.User, error) {
-	var user models.User
-	s.db.QueryRow(`
-		SELECT
-			id, username, hashed_password, currency
-			created_at, updated_at, deleted_at
-		FROM user
+	row := s.db.QueryRow(`
+		SELECT * FROM user
 		WHERE id = ? AND deleted_at IS NULL
-	`, id).Scan(&user)
-
-	if user.ID == 0 {
+	`, id)
+	user, err := scanIntoStruct(row)
+	if err != nil {
+		return models.User{}, err
+	} else if user.ID == 0 {
 		return models.User{}, fmt.Errorf("user with id %d not found", id)
 	}
 
@@ -85,4 +77,15 @@ func (s *SQLiteUserService) UpdateUser(user models.User) (models.User, error) {
 func (s *SQLiteUserService) DeleteUser(id int64) error {
 	// Implement the method
 	return nil
+}
+
+func scanIntoStruct(row interface {
+	Scan(dest ...interface{}) error
+}) (models.User, error) {
+	var user models.User
+	err := row.Scan(
+		&user.ID, &user.Username, &user.HashedPassword, &user.Currency,
+		&user.CreatedAt, &user.UpdatedAt, &user.DeletedAt,
+	)
+	return user, err
 }
