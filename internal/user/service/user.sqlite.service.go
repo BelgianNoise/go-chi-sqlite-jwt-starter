@@ -48,7 +48,7 @@ func (s *SQLiteUserService) CreateUser(user models.UserFields) (models.User, err
 	row := s.db.QueryRow(`
 		INSERT INTO user (username, hashed_password, currency)
 		VALUES (?, ?, ?)
-		RETURNING id, username, hashed_password, currency, created_at, updated_at, deleted_at
+		RETURNING id, username, hashed_password, currency, role, created_at, updated_at, deleted_at
 	`, user.Username, user.HashedPassword, user.Currency)
 	newUser, err := scanIntoStruct(row)
 	if err != nil {
