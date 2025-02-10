@@ -15,11 +15,7 @@ func CreateCategoryGroup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID, err := utils.GetUserIDFromContext(r.Context())
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	userID := utils.GetUserIDFromContext(w, r.Context())
 	groupFields := models.CategoryGroupFields{
 		Name:    requestBody.Name,
 		OwnerID: userID,

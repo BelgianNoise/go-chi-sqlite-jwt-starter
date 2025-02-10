@@ -9,7 +9,6 @@ import (
 	models "gofinn/internal/models"
 	provider "gofinn/internal/provider"
 	"gofinn/internal/utils"
-	"gofinn/internal/validation"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -40,15 +39,10 @@ func CategoryGroupCtx(next http.Handler) http.Handler {
 			return
 		}
 
-		catgoryGroup, err := provider.Provider.CategoryGroupService.GetCategoryGroup(id)
+		user := utils.GetUserFromContext(w, r.Context())
+		catgoryGroup, err := provider.Provider.CategoryGroupService.GetCategoryGroupForUser(id, user.ID)
 		if err != nil {
 			http.Error(w, http.StatusText(404), http.StatusNotFound)
-			return
-		}
-
-		user := r.Context().Value(models.ContextKeys.User).(models.User)
-		err = validation.HasAccessToCategoryGroup(w, catgoryGroup.ID, user.ID)
-		if err != nil {
 			return
 		}
 

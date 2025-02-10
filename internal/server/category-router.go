@@ -46,7 +46,7 @@ func CategoryCtx(next http.Handler) http.Handler {
 			return
 		}
 
-		user := r.Context().Value(models.ContextKeys.User).(models.User)
+		user := utils.GetUserFromContext(w, r.Context())
 		err = validation.HasAccessToCategoryGroup(w, catgory.CategoryGroupID, user.ID)
 		if err != nil {
 			return

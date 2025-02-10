@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"gofinn/internal/models"
 	"gofinn/internal/provider"
+	"gofinn/internal/utils"
 	"gofinn/internal/validation"
 	"net/http"
 )
@@ -15,7 +16,7 @@ func CreateCategory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user := r.Context().Value(models.ContextKeys.User).(models.User)
+	user := utils.GetUserFromContext(w, r.Context())
 	err := validation.HasAccessToCategoryGroup(w, categoryFields.CategoryGroupID, user.ID)
 	if err != nil {
 		return

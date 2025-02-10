@@ -3,6 +3,7 @@ package server
 import (
 	"gofinn/internal/auth"
 	"gofinn/internal/models"
+	"gofinn/internal/utils"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -22,7 +23,7 @@ func adminRouter() http.Handler {
 
 func adminOnly(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		user := r.Context().Value(models.ContextKeys.User).(models.User)
+		user := utils.GetUserFromContext(w, r.Context())
 		if user.Role != models.Admin {
 			http.Error(w, http.StatusText(403), http.StatusForbidden)
 			return

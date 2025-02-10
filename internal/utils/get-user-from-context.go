@@ -2,22 +2,20 @@ package utils
 
 import (
 	"context"
-	"fmt"
 	"gofinn/internal/models"
+	"net/http"
 )
 
-func GetUserFromContext(ctx context.Context) (models.User, error) {
+func GetUserFromContext(w http.ResponseWriter, ctx context.Context) models.User {
 	user, ok := ctx.Value(models.ContextKeys.User).(models.User)
 	if !ok {
-		return models.User{}, fmt.Errorf("user not found in context")
+		http.Error(w, "user was not found in context, you want to try to login again", http.StatusForbidden)
+		panic("[ERR-5864] user was not found in context")
 	}
-	return user, nil
+	return user
 }
 
-func GetUserIDFromContext(ctx context.Context) (int64, error) {
-	user, err := GetUserFromContext(ctx)
-	if err != nil {
-		return 0, err
-	}
-	return user.ID, nil
+func GetUserIDFromContext(w http.ResponseWriter, ctx context.Context) int64 {
+	user := GetUserFromContext(w, ctx)
+	return user.ID
 }
