@@ -1,7 +1,8 @@
 ### Register User
 @baseUrl = http://localhost:9595
 @authToken = {{auth_login.response.body.token}}
-@categoryId = {{category_group_create.response.body.id}}
+@categoryGroupId = {{category_group_create.response.body.id}}
+@categoryId = {{category_create.response.body.id}}
 
 ### Register User
 # @name auth_register
@@ -40,6 +41,31 @@ Content-Type: application/json
 
 ### Get Category Group
 # @name category_group_get
-GET {{baseUrl}}/category-group/{{categoryId}}
+GET {{baseUrl}}/category-group/{{categoryGroupId}}
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
+
+### Delete Category Group
+# @name category_group_delete
+DELETE {{baseUrl}}/category-group/{{categoryGroupId}}
+Authorization: Bearer {{authToken}}
+
+### Create Category
+# @name category_create
+POST {{baseUrl}}/category/create
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "My Category",
+  "group_id": "{{categoryGroupId}}"
+}
+
+### Get Category
+# @name category_get
+GET {{baseUrl}}/category/{{categoryId}}
+Authorization: Bearer {{authToken}}
+
+### Delete Category
+# @name category_delete
+DELETE {{baseUrl}}/category/{{categoryId}}
+Authorization: Bearer {{authToken}}
