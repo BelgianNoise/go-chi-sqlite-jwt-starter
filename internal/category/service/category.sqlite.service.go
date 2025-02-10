@@ -54,8 +54,12 @@ func (s *SQLiteCategoryService) UpdateCategory(category models.Category) (models
 }
 
 func (s *SQLiteCategoryService) DeleteCategory(id int64) error {
-	// Implement the method
-	return nil
+	_, err := s.db.Exec(`
+		UPDATE category
+		SET deleted_at = datetime('now')
+		WHERE id = ?
+	`, id)
+	return err
 }
 
 func (s *SQLiteCategoryService) getCategoriesForUser(
