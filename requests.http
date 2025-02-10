@@ -1,0 +1,45 @@
+### Register User
+@baseUrl = http://localhost:9595
+@authToken = {{auth_login.response.body.token}}
+@categoryId = {{category_group_create.response.body.id}}
+
+### Register User
+# @name auth_register
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "Arthur",
+  "password": "a"
+}
+
+### Login User
+# @name auth_login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "Arthur",
+  "password": "a"
+}
+
+### Admin test
+# @name admin_test_token
+GET {{baseUrl}}/admin/test-token
+Authorization: Bearer {{authToken}}
+
+### Create Category Group
+# @name category_group_create
+POST {{baseUrl}}/category-group/create
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "My Category Group"
+}
+
+### Get Category Group
+# @name category_group_get
+GET {{baseUrl}}/category-group/{{categoryId}}
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
