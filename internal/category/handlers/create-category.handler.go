@@ -15,7 +15,11 @@ func CreateCategory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	validation.HasAccessToCategoryGroup(categoryFields.CategoryGroupID)
+	user := r.Context().Value(models.ContextKeys.User).(models.User)
+	err := validation.HasAccessToCategoryGroup(w, categoryFields.CategoryGroupID, user.ID)
+	if err != nil {
+		return
+	}
 
 	createdCategory, err := provider.Provider.CategoryService.CreateCategory(categoryFields)
 	if err != nil {
