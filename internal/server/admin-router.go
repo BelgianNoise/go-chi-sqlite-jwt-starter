@@ -1,6 +1,8 @@
 package server
 
 import (
+	"gofinn/internal/auth"
+	"gofinn/internal/models"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -8,6 +10,7 @@ import (
 
 func adminRouter() http.Handler {
 	r := chi.NewRouter()
+	auth.UseAuthMiddleware(r)
 	r.Use(adminOnly)
 
 	r.Get("/test-token", func(w http.ResponseWriter, r *http.Request) {
@@ -19,8 +22,9 @@ func adminRouter() http.Handler {
 
 func adminOnly(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if true {
-			http.Error(w, http.StatusText(403), 403)
+		user := r.Context().Value(models.ContextKeys.User).(models.User)
+		if user.Role != models.Admin {
+			http.Error(w, http.StatusText(403), http.StatusForbidden)
 			return
 		}
 		next.ServeHTTP(w, r)
