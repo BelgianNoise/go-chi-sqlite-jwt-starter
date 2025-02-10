@@ -5,72 +5,33 @@ import (
 	"fmt"
 	"gofinn/internal/database"
 	"gofinn/internal/models"
+	"strings"
 )
 
 type SQLiteCategoryGroupService struct {
-	db *sql.DB
+	db      *sql.DB
+	columns []string
 }
 
 func NewSQLiteCategoryGroupService() CategoryGroupService {
 	return &SQLiteCategoryGroupService{
 		db: database.GetDatabaseInstance(),
+		columns: []string{
+			"id", "name", "owner_id",
+			"created_at", "updated_at", "deleted_at",
+		},
 	}
 }
 
 func (s *SQLiteCategoryGroupService) ListCategoryGroupsForUser(
 	ownerID int64,
 ) ([]models.CategoryGroup, error) {
-	return s.getCategoryGroupsForUser(ownerID, 100)
-}
-
-func (s *SQLiteCategoryGroupService) CreateCategoryGroup(categoryGroup models.CategoryGroupFields) (models.CategoryGroup, error) {
-	row := s.db.QueryRow(`
-		INSERT INTO category_group (name, owner_id)
-		VALUES (?, ?)
-		RETURNING id, name, owner_id, created_at, updated_at, deleted_at
-	`, categoryGroup.Name, categoryGroup.OwnerID)
-
-	newCategoryGroup, err := scanIntoStruct(row)
-	if err != nil {
-		return models.CategoryGroup{}, err
-	}
-	return newCategoryGroup, nil
-}
-
-func (s *SQLiteCategoryGroupService) GetCategoryGroup(id int64) (models.CategoryGroup, error) {
-	categoryGroups, err := s.getCategoryGroupsForUser(id, 1)
-	if err != nil {
-		return models.CategoryGroup{}, err
-	}
-	if len(categoryGroups) == 0 {
-		return models.CategoryGroup{}, fmt.Errorf("category group with id %d not found", id)
-	}
-	return categoryGroups[0], nil
-}
-
-func (s *SQLiteCategoryGroupService) UpdateCategoryGroup(categoryGroup models.CategoryGroup) (models.CategoryGroup, error) {
-	// Implement the method
-	return categoryGroup, nil
-}
-
-func (s *SQLiteCategoryGroupService) DeleteCategoryGroup(id int64) error {
-	// Implement the method
-	return nil
-}
-
-func (s *SQLiteCategoryGroupService) getCategoryGroupsForUser(
-	ownerID int64,
-	limit int,
-) ([]models.CategoryGroup, error) {
 	var categoryGroups []models.CategoryGroup
 	rows, err := s.db.Query(`
-		SELECT
-			id, name, owner_id,
-			created_at, updated_at, deleted_at
+		SELECT `+strings.Join(s.columns, ", ")+`
 		FROM category_group
 		WHERE owner_id = ? AND deleted_at IS NULL
-		LIMIT ?
-	`, ownerID, limit)
+	`, ownerID)
 	if err != nil {
 		return nil, err
 	}
@@ -87,6 +48,59 @@ func (s *SQLiteCategoryGroupService) getCategoryGroupsForUser(
 		}
 	}
 	return categoryGroups, nil
+}
+
+func (s *SQLiteCategoryGroupService) CreateCategoryGroup(categoryGroup models.CategoryGroupFields) (models.CategoryGroup, error) {
+	row := s.db.QueryRow(`
+		INSERT INTO category_group (name, owner_id)
+		VALUES (?, ?)
+		RETURNING `+strings.Join(s.columns, ", ")+`
+	`, categoryGroup.Name, categoryGroup.OwnerID)
+
+	newCategoryGroup, err := scanIntoStruct(row)
+	if err != nil {
+		return models.CategoryGroup{}, err
+	}
+	return newCategoryGroup, nil
+}
+
+func (s *SQLiteCategoryGroupService) GetCategoryGroupForUser(
+	id int64,
+	ownerID int64,
+) (models.CategoryGroup, error) {
+	row := s.db.QueryRow(`
+		SELECT `+strings.Join(s.columns, ", ")+`
+		FROM category_group
+		WHERE id = ? AND owner_id = ? AND deleted_at IS NULL
+	`, id, ownerID)
+	categoryGroup, err := scanIntoStruct(row)
+	if err == sql.ErrNoRows {
+		return models.CategoryGroup{}, fmt.Errorf("Category group with ID %d not found", id)
+	}
+	return categoryGroup, err
+}
+
+func (s *SQLiteCategoryGroupService) GetCategoryGroup(id int64) (models.CategoryGroup, error) {
+	row := s.db.QueryRow(`
+		SELECT `+strings.Join(s.columns, ", ")+`
+		FROM category_group
+		WHERE id = ?
+	`, id)
+	categoryGroup, err := scanIntoStruct(row)
+	if err == sql.ErrNoRows {
+		return models.CategoryGroup{}, fmt.Errorf("Category group not found")
+	}
+	return categoryGroup, err
+}
+
+func (s *SQLiteCategoryGroupService) UpdateCategoryGroup(categoryGroup models.CategoryGroup) (models.CategoryGroup, error) {
+	// Implement the method
+	return categoryGroup, nil
+}
+
+func (s *SQLiteCategoryGroupService) DeleteCategoryGroup(id int64) error {
+	// Implement the method
+	return nil
 }
 
 func scanIntoStruct(row interface {
