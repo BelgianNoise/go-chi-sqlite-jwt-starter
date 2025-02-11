@@ -75,7 +75,7 @@ func (s *SQLiteCategoryGroupService) GetCategoryGroupForUser(
 	`, id, ownerID)
 	categoryGroup, err := scanIntoStruct(row)
 	if err == sql.ErrNoRows {
-		return models.CategoryGroup{}, fmt.Errorf("Category group with ID %d not found", id)
+		return models.CategoryGroup{}, fmt.Errorf("category group with ID %d not found", id)
 	}
 	return categoryGroup, err
 }
@@ -84,23 +84,36 @@ func (s *SQLiteCategoryGroupService) GetCategoryGroup(id int64) (models.Category
 	row := s.db.QueryRow(`
 		SELECT `+strings.Join(s.columns, ", ")+`
 		FROM category_group
-		WHERE id = ?
+		WHERE id = ? AND deleted_at IS NULL
 	`, id)
 	categoryGroup, err := scanIntoStruct(row)
 	if err == sql.ErrNoRows {
-		return models.CategoryGroup{}, fmt.Errorf("Category group not found")
+		return models.CategoryGroup{}, fmt.Errorf("category group not found")
 	}
 	return categoryGroup, err
 }
 
-func (s *SQLiteCategoryGroupService) UpdateCategoryGroup(categoryGroup models.CategoryGroup) (models.CategoryGroup, error) {
-	// Implement the method
-	return categoryGroup, nil
+func (s *SQLiteCategoryGroupService) UpdateCategoryGroupName(id int64, name string) (models.CategoryGroup, error) {
+	result := s.db.QueryRow(`
+		UPDATE category_group
+		SET name = ?, updated_at = CURRENT_TIMESTAMP
+		WHERE id = ?
+		RETURNING `+strings.Join(s.columns, ", ")+`
+	`, name, id)
+	updatedCategoryGroup, err := scanIntoStruct(result)
+	if err == sql.ErrNoRows {
+		return models.CategoryGroup{}, fmt.Errorf("category group not found")
+	}
+	return updatedCategoryGroup, err
 }
 
 func (s *SQLiteCategoryGroupService) DeleteCategoryGroup(id int64) error {
-	// Implement the method
-	return nil
+	_, err := s.db.Exec(`
+		UPDATE category_group
+		SET deleted_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
+		WHERE id = ?
+	`, id)
+	return err
 }
 
 func scanIntoStruct(row interface {

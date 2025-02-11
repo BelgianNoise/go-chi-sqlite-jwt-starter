@@ -23,7 +23,7 @@ func categoryGroupRouter() http.Handler {
 	r.Route("/{categoryGroupID}", func(r chi.Router) {
 		r.Use(CategoryGroupCtx)
 		r.Get("/", category_group_handlers.GetCategoryGroup)
-		r.Put("/", category_group_handlers.UpdateCategoryGroup)
+		r.Post("/rename", category_group_handlers.RenameCategoryGroup)
 		r.Delete("/", category_group_handlers.DeleteCategoryGroup)
 	})
 
