@@ -2,10 +2,10 @@ package auth_handlers
 
 import (
 	"encoding/json"
-	"gofinn/internal/models"
-	"gofinn/internal/provider"
-	"gofinn/internal/utils"
-	"gofinn/internal/validation"
+	"go-chi-sqlite-jwt-starter/internal/models"
+	"go-chi-sqlite-jwt-starter/internal/provider"
+	"go-chi-sqlite-jwt-starter/internal/utils"
+	"go-chi-sqlite-jwt-starter/internal/validation"
 	"net/http"
 )
 
@@ -22,7 +22,6 @@ func RegisterAccount(w http.ResponseWriter, r *http.Request) {
 	_, err := provider.Provider.UserService.CreateUser(models.UserFields{
 		Username:       registerCreds.Username,
 		HashedPassword: hashedPassword,
-		Currency:       "EUR",
 	})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

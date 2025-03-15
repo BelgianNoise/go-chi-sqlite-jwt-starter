@@ -1,9 +1,9 @@
 package server
 
 import (
-	"gofinn/internal/auth"
-	"gofinn/internal/models"
-	"gofinn/internal/utils"
+	"go-chi-sqlite-jwt-starter/internal/auth"
+	"go-chi-sqlite-jwt-starter/internal/models"
+	"go-chi-sqlite-jwt-starter/internal/utils"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"

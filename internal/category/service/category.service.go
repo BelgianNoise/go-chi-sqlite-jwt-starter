@@ -1,7 +1,7 @@
 package category_service
 
 import (
-	"gofinn/internal/models"
+	"go-chi-sqlite-jwt-starter/internal/models"
 )
 
 type CategoryService interface {

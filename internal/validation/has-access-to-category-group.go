@@ -2,7 +2,7 @@ package validation
 
 import (
 	"fmt"
-	"gofinn/internal/provider"
+	"go-chi-sqlite-jwt-starter/internal/provider"
 	"net/http"
 )
 

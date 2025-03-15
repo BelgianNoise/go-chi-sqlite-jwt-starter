@@ -3,7 +3,7 @@ package server
 import (
 	"net/http"
 
-	auth_handlers "gofinn/internal/auth/handlers"
+	auth_handlers "go-chi-sqlite-jwt-starter/internal/auth/handlers"
 
 	"github.com/go-chi/chi/v5"
 )

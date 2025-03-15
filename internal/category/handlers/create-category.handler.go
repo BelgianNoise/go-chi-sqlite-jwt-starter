@@ -2,10 +2,10 @@ package category_handlers
 
 import (
 	"encoding/json"
-	"gofinn/internal/models"
-	"gofinn/internal/provider"
-	"gofinn/internal/utils"
-	"gofinn/internal/validation"
+	"go-chi-sqlite-jwt-starter/internal/models"
+	"go-chi-sqlite-jwt-starter/internal/provider"
+	"go-chi-sqlite-jwt-starter/internal/utils"
+	"go-chi-sqlite-jwt-starter/internal/validation"
 	"net/http"
 )
 

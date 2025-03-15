@@ -2,9 +2,9 @@ package auth
 
 import (
 	"context"
-	"gofinn/config"
-	"gofinn/internal/models"
-	"gofinn/internal/provider"
+	"go-chi-sqlite-jwt-starter/config"
+	"go-chi-sqlite-jwt-starter/internal/models"
+	"go-chi-sqlite-jwt-starter/internal/provider"
 	"net/http"
 	"time"
 

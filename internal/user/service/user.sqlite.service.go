@@ -3,8 +3,8 @@ package user_service
 import (
 	"database/sql"
 	"fmt"
-	"gofinn/internal/database"
-	"gofinn/internal/models"
+	"go-chi-sqlite-jwt-starter/internal/database"
+	"go-chi-sqlite-jwt-starter/internal/models"
 )
 
 type SQLiteUserService struct {
@@ -46,10 +46,10 @@ func (s *SQLiteUserService) ListUsers() ([]models.User, error) {
 
 func (s *SQLiteUserService) CreateUser(user models.UserFields) (models.User, error) {
 	row := s.db.QueryRow(`
-		INSERT INTO user (username, hashed_password, currency)
+		INSERT INTO user (username, hashed_password)
 		VALUES (?, ?, ?)
-		RETURNING id, username, hashed_password, currency, role, created_at, updated_at, deleted_at
-	`, user.Username, user.HashedPassword, user.Currency)
+		RETURNING id, username, hashed_password, role, created_at, updated_at, deleted_at
+	`, user.Username, user.HashedPassword)
 	newUser, err := scanIntoStruct(row)
 	if err != nil {
 		return models.User{}, err
@@ -60,7 +60,7 @@ func (s *SQLiteUserService) CreateUser(user models.UserFields) (models.User, err
 func (s *SQLiteUserService) GetUser(id int64) (models.User, error) {
 	row := s.db.QueryRow(`
 		SELECT
-			id, username, hashed_password, currency, role,
+			id, username, hashed_password, role,
 			created_at, updated_at, deleted_at
 		FROM user
 		WHERE id = ? AND deleted_at IS NULL
@@ -78,7 +78,7 @@ func (s *SQLiteUserService) GetUser(id int64) (models.User, error) {
 func (s *SQLiteUserService) GetUserByUsername(username string) (models.User, error) {
 	row := s.db.QueryRow(`
 		SELECT
-			id, username, hashed_password, currency, role,
+			id, username, hashed_password, role,
 			created_at, updated_at, deleted_at
 		FROM user
 		WHERE username = ? AND deleted_at IS NULL
@@ -108,7 +108,7 @@ func scanIntoStruct(row interface {
 }) (models.User, error) {
 	var user models.User
 	err := row.Scan(
-		&user.ID, &user.Username, &user.HashedPassword, &user.Currency, &user.Role,
+		&user.ID, &user.Username, &user.HashedPassword, &user.Role,
 		&user.CreatedAt, &user.UpdatedAt, &user.DeletedAt,
 	)
 	return user, err

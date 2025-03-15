@@ -2,9 +2,9 @@ package category_group_handlers
 
 import (
 	"encoding/json"
-	"gofinn/internal/models"
-	"gofinn/internal/provider"
-	"gofinn/internal/utils"
+	"go-chi-sqlite-jwt-starter/internal/models"
+	"go-chi-sqlite-jwt-starter/internal/provider"
+	"go-chi-sqlite-jwt-starter/internal/utils"
 	"net/http"
 )
 

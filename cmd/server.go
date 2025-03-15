@@ -1,10 +1,10 @@
 package main
 
 import (
-	"gofinn/config"
-	"gofinn/internal/database"
-	"gofinn/internal/provider"
-	"gofinn/internal/server"
+	"go-chi-sqlite-jwt-starter/config"
+	"go-chi-sqlite-jwt-starter/internal/database"
+	"go-chi-sqlite-jwt-starter/internal/provider"
+	"go-chi-sqlite-jwt-starter/internal/server"
 	"log"
 	"net/http"
 )

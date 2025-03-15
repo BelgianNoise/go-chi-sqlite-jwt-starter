@@ -1,9 +1,9 @@
 package provider
 
 import (
-	category_group_service "gofinn/internal/category-group/service"
-	category_service "gofinn/internal/category/service"
-	user_service "gofinn/internal/user/service"
+	category_group_service "go-chi-sqlite-jwt-starter/internal/category-group/service"
+	category_service "go-chi-sqlite-jwt-starter/internal/category/service"
+	user_service "go-chi-sqlite-jwt-starter/internal/user/service"
 	"log"
 )
 

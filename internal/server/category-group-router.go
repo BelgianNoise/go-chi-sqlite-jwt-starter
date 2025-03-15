@@ -4,11 +4,11 @@ import (
 	"context"
 	"net/http"
 
-	"gofinn/internal/auth"
-	category_group_handlers "gofinn/internal/category-group/handlers"
-	models "gofinn/internal/models"
-	provider "gofinn/internal/provider"
-	"gofinn/internal/utils"
+	"go-chi-sqlite-jwt-starter/internal/auth"
+	category_group_handlers "go-chi-sqlite-jwt-starter/internal/category-group/handlers"
+	models "go-chi-sqlite-jwt-starter/internal/models"
+	provider "go-chi-sqlite-jwt-starter/internal/provider"
+	"go-chi-sqlite-jwt-starter/internal/utils"
 
 	"github.com/go-chi/chi/v5"
 )

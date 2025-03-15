@@ -2,10 +2,10 @@ package auth_handlers
 
 import (
 	"encoding/json"
-	"gofinn/internal/auth"
-	"gofinn/internal/models"
-	"gofinn/internal/provider"
-	"gofinn/internal/utils"
+	"go-chi-sqlite-jwt-starter/internal/auth"
+	"go-chi-sqlite-jwt-starter/internal/models"
+	"go-chi-sqlite-jwt-starter/internal/provider"
+	"go-chi-sqlite-jwt-starter/internal/utils"
 	"net/http"
 )
 

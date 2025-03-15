@@ -1,4 +1,4 @@
-module gofinn
+module go-chi-sqlite-jwt-starter
 
 go 1.21
 

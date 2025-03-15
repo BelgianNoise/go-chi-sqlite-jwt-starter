@@ -1,7 +1,7 @@
 package user_service
 
 import (
-	"gofinn/internal/models"
+	"go-chi-sqlite-jwt-starter/internal/models"
 )
 
 type UserService interface {

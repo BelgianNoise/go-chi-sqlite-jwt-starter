@@ -3,8 +3,8 @@ package category_service
 import (
 	"database/sql"
 	"fmt"
-	"gofinn/internal/database"
-	"gofinn/internal/models"
+	"go-chi-sqlite-jwt-starter/internal/database"
+	"go-chi-sqlite-jwt-starter/internal/models"
 )
 
 type SQLiteCategoryService struct {

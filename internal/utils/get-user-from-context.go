@@ -2,7 +2,7 @@ package utils
 
 import (
 	"context"
-	"gofinn/internal/models"
+	"go-chi-sqlite-jwt-starter/internal/models"
 	"net/http"
 )
 

@@ -1,7 +1,7 @@
 package category_group_handlers
 
 import (
-	"gofinn/internal/models"
+	"go-chi-sqlite-jwt-starter/internal/models"
 	"net/http"
 )
 

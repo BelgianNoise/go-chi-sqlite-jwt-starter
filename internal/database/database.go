@@ -2,7 +2,7 @@ package database
 
 import (
 	"database/sql"
-	"gofinn/config"
+	"go-chi-sqlite-jwt-starter/config"
 	"log"
 	"os"
 

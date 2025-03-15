@@ -1,9 +1,8 @@
 package server
 
 import (
-	"gofinn/internal/auth"
+	"go-chi-sqlite-jwt-starter/internal/auth"
 	"log"
-	"net/http"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -16,10 +15,6 @@ func Initialize() *chi.Mux {
 	r := chi.NewRouter()
 	useGlobalMiddleware(r)
 	auth.InitializeTokenVerifier()
-
-	r.Get("/me", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("me me me me me me"))
-	})
 
 	r.Mount("/category", categoryRouter())
 	r.Mount("/category-group", categoryGroupRouter())
