@@ -25,7 +25,9 @@ func DeleteCategory(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(struct{ id int64 }{
-		id: category.ID,
+	json.NewEncoder(w).Encode(struct {
+		ID int64 `json:"id"`
+	}{
+		ID: category.ID,
 	})
 }

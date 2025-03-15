@@ -17,7 +17,7 @@ func HasAccessToCategoryGroup(
 		return err
 	}
 	if categoryGroup.OwnerID != userID {
-		http.Error(w, http.StatusText(403), http.StatusForbidden)
+		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 		return fmt.Errorf("user does not have access to category group")
 	}
 	return nil

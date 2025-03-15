@@ -25,7 +25,7 @@ func adminOnly(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		user := utils.GetUserFromContext(w, r.Context())
 		if user.Role != models.Admin {
-			http.Error(w, http.StatusText(403), http.StatusForbidden)
+			http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 			return
 		}
 		next.ServeHTTP(w, r)
